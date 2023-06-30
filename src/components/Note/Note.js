@@ -71,11 +71,11 @@ export default class Note extends React.Component {
     wrap,
     wrapSplitter,
     dx,
-    dy
+    dy,
   }) {
     const newState = {
       titleWrapped: null,
-      labelWrapped: null
+      labelWrapped: null,
     }
     newState.changed = this.state.changed + 1
 
@@ -97,7 +97,7 @@ export default class Note extends React.Component {
           bbox,
           offset: { x: dx, y: dy },
           orientation,
-          align
+          align,
         }
         if (lineType === "vertical") noteParams.orientation = "leftRight"
         else if (lineType === "horizontal") noteParams.orientation = "topBottom"
@@ -107,13 +107,13 @@ export default class Note extends React.Component {
         this.setState({
           translateX: x,
           translateY: y,
-          bbox
+          bbox,
         })
       }
 
       this.setState(
         {
-          labelOffset: (title && this.title.getBBox().height) || 0
+          labelOffset: (title && this.title.getBBox().height) || 0,
         },
         setLabel
       )
@@ -123,13 +123,13 @@ export default class Note extends React.Component {
   wrapText(textRef, key, text, width, wrapSplitter) {
     const initialAttrs = {
       x: 0,
-      dy: "1.2em"
+      dy: "1.2em",
     }
 
     const words = text
       .split(wrapSplitter || /[ \t\r\n]+/)
       .reverse()
-      .filter(w => w !== "")
+      .filter((w) => w !== "")
 
     let word,
       line = []
@@ -184,7 +184,7 @@ export default class Note extends React.Component {
         bbox,
         offset: { x: dx, y: dy },
         orientation,
-        align
+        align,
       }
 
       if (lineType === "vertical") noteParams.orientation = "leftRight"
@@ -210,7 +210,7 @@ export default class Note extends React.Component {
         bbox: this.state.bbox,
         offset: { x: dx, y: dy },
         orientation,
-        align
+        align,
       }
 
       if (lineType === "vertical") noteParams.orientation = "leftRight"
@@ -241,7 +241,10 @@ export default class Note extends React.Component {
       color,
       titleColor,
       labelColor,
-      bgPadding
+      labelFontWeight,
+      labelFontStyle,
+      labelFontFamily,
+      bgPadding,
     } = this.props
 
     let bgPaddingFinal = { top: 0, bottom: 0, left: 0, right: 0 }
@@ -251,7 +254,7 @@ export default class Note extends React.Component {
         top: bgPadding,
         bottom: bgPadding,
         left: bgPadding,
-        right: bgPadding
+        right: bgPadding,
       }
     } else if (bgPadding && typeof bgPadding === "object") {
       bgPaddingFinal = Object.assign(bgPaddingFinal, bgPadding)
@@ -261,7 +264,7 @@ export default class Note extends React.Component {
     if (title) {
       noteTitle = (
         <text
-          ref={el => (this.title = el)}
+          ref={(el) => (this.title = el)}
           className="annotation-note-title"
           fontWeight="bold"
           key="title"
@@ -279,10 +282,13 @@ export default class Note extends React.Component {
     if (label) {
       noteText = (
         <text
-          ref={el => (this.label = el)}
+          ref={(el) => (this.label = el)}
           className="annotation-note-label"
           y={this.state.labelOffset * 1.1}
           key="label"
+          fontWeight={labelFontWeight}
+          fontStyle={labelFontStyle}
+          fontFamily={labelFontFamily}
           fill={labelColor || color}
         >
           {this.state.labelWrapped || (
@@ -298,7 +304,7 @@ export default class Note extends React.Component {
       const noteParams = {
         bbox: this.state.bbox,
         align,
-        offset: { x: dx, y: dy }
+        offset: { x: dx, y: dy },
       }
 
       const noteComponent = (
@@ -337,7 +343,7 @@ export default class Note extends React.Component {
           className="annotation-note-content"
           transform={`translate(${this.state.translateX},
           ${this.state.translateY})`}
-          ref={el => (this.note = el)}
+          ref={(el) => (this.note = el)}
         >
           <rect
             className="annotation-note-bg"
@@ -369,7 +375,7 @@ Note.defaultProps = {
   wrap: 120,
   align: "dynamic",
   orientation: "topBottom",
-  padding: 3
+  padding: 3,
 }
 
 Note.propTypes = {
@@ -386,11 +392,14 @@ Note.propTypes = {
     "middle",
     "top",
     "bottom",
-    "dynamic"
+    "dynamic",
   ]),
   editMode: PropTypes.bool,
   lineType: PropTypes.oneOf(["vertical", "horizontal"]),
   color: PropTypes.string,
   titleColor: PropTypes.string,
-  labelColor: PropTypes.string
+  labelColor: PropTypes.string,
+  labelFontWeight: PropTypes.string,
+  labelFontStyle: PropTypes.string,
+  labelFontFamily: PropTypes.string,
 }
